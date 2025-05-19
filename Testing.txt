@@ -1,0 +1,25 @@
+Backend:
+Run: cd backend && go run main.go
+Test:
+Signup: curl -X POST http://localhost:8080/auth/signup -d '{"email":"test@example.com","password":"password"}'
+Login: curl -X POST http://localhost:8080/auth/login -d '{"email":"test@example.com","password":"password"}'
+Upload: curl -X POST http://localhost:8080/api/files/upload -F "file=@test.txt" -F "userEmail=test@example.com" -H "Authorization: Bearer <token>"
+Ingest Log: curl -X POST http://localhost:8080/api/logs -H "Authorization: Bearer <token>" -d '{"service":"backend","message":"test log","level":"info"}'
+Query Logs: curl http://localhost:8080/api/logs?service=backend -H "Authorization: Bearer <token>"
+Frontend:
+Run: cd frontend && npm start
+Access: http://localhost:3000
+Test login, signup, log viewing, and metrics charts.
+Fluentd:
+Generate logs in backend/logs/backend.log (e.g., via API calls).
+Check MongoDB log_system.logs collection.
+Prometheus:
+Access: http://localhost:9090
+Query: api_requests_total
+Check alerts in Alertmanager: http://localhost:9093
+Docker Compose:
+Run: docker-compose up --build
+Test all services locally.
+Kubernetes:
+Get frontend URL: kubectl get svc frontend
+Test API and UI via the LoadBalancer IP.

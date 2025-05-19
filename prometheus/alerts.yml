@@ -1,0 +1,19 @@
+groups:
+- name: example
+  rules:
+  - alert: HighErrorRate
+    expr: rate(http_request_latency_seconds_count{status="500"}[5m]) > 0.01
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High error rate detected"
+      description: "Error rate is above 1% for 5 minutes."
+  - alert: HighLogErrorRate
+    expr: rate(log_errors_total[5m]) > 0.05
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High log error rate detected"
+      description: "Error logs are occurring at a rate above 5%."

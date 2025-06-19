@@ -1,22 +1,31 @@
-/** @type {import('tailwindcss').Config} */
+// /** @type {import('tailwindcss').Config} */
+// module.exports = {
+//   content: [
+//     "./src/**/*.{js,jsx,ts,tsx}",
+//     "./public/index.html", // optional: useful if using Tailwind classes in HTML
+//   ],
+//   theme: {
+//     extend: {
+//       colors: {
+//         primary: "#1D4ED8",   // example primary color
+//         secondary: "#64748B", // example secondary
+//       },
+//       fontFamily: {
+//         sans: ['Inter', 'sans-serif'],
+//       },
+//     },
+//   },
+//   plugins: [
+//     require('@tailwindcss/forms'), // optional: better form styling
+//     require('@tailwindcss/typography'), // optional: for prose content
+//   ],
+// };
+
+
 module.exports = {
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-    "./public/index.html", // optional: useful if using Tailwind classes in HTML
-  ],
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {
-      colors: {
-        primary: "#1D4ED8",   // example primary color
-        secondary: "#64748B", // example secondary
-      },
-      fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-      },
-    },
+    extend: {},
   },
-  plugins: [
-    require('@tailwindcss/forms'), // optional: better form styling
-    require('@tailwindcss/typography'), // optional: for prose content
-  ],
+  plugins: [],
 };

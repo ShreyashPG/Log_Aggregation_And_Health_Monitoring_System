@@ -30,7 +30,7 @@ const LogViewer: React.FC<LogViewerProps> = ({ token }) => {
       if (level) params.append('level', level);
       if (keyword) params.append('keyword', keyword);
 
-      const res = await axios.get(`http://localhost:8080/logs?${params.toString()}`, {
+      const res = await axios.get(`http://localhost:8080/api/logs?${params.toString()}`, {
         headers: { 
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'

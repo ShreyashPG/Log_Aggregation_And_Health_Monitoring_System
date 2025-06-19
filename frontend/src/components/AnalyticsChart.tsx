@@ -21,7 +21,7 @@ const AnalyticsChart: React.FC<AnalyticsChartProps> = ({ token }) => {
       try {
         setLoading(true);
         setError('');
-        const res = await axios.get('http://localhost:8080/analytics', {
+        const res = await axios.get('http://localhost:8080/api/analytics', {
           headers: { 
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'

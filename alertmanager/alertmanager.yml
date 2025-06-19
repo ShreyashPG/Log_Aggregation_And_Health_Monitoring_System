@@ -1,7 +1,7 @@
 global:
   smtp_smarthost: 'smtp.gmail.com:587'
-  smtp_from: 'your-email@gmail.com'
-  smtp_auth_username: 'your-email@gmail.com'
+  smtp_from: 'shreyasghanekar35@gmail.com'
+  smtp_auth_username: 'shreyasghanekar35@gmail.com'
   smtp_auth_password: 'your-app-password'
 
 route:
@@ -14,9 +14,9 @@ route:
 receivers:
 - name: 'team-notifications'
   email_configs:
-  - to: 'recipient@example.com'
+  - to: 'shreyasghanekar35@gmail.com.com'
     send_resolved: true
-  slack_configs:
-  - api_url: 'https://hooks.slack.com/services/your/slack/webhook'
-    channel: '#alerts'
-    send_resolved: true
+  # slack_configs:
+  # - api_url: 'https://hooks.slack.com/services/your/slack/webhook'
+  #   channel: '#alerts'
+  #   send_resolved: true

@@ -10,7 +10,7 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <div className="min-h-screen bg-gray-100">
+      <div className=" min-h-screen bg-gray-100">
         <Routes>
           <Route path="/login" element={<Login setToken={setToken} />} />
           <Route path="/signup" element={<Signup />} />

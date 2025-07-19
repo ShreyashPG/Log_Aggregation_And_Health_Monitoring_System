@@ -1,5 +1,5 @@
 groups:
-- name: example
+- name: Log_Monitor
   rules:
   - alert: HighErrorRate
     expr: rate(http_request_latency_seconds_count{status="500"}[5m]) > 0.01

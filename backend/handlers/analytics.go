@@ -2,7 +2,7 @@
 package handlers
 
 import (
-    "backend/config"
+    "logmonitor/backend/config"
     "context"
     "net/http"
     "time"

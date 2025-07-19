@@ -11,10 +11,10 @@ type Config struct {
     PostgresURI     string
     JWTSecret       string
     ServerPort      string
-    B2KeyID         string
-    B2AppKey        string
-    B2BucketName    string
-    B2Endpoint      string
+    S3KeyID         string
+    S3AppKey        string
+    S3BucketName    string
+    S3Endpoint      string
 }
 
 var AppConfig *Config
@@ -30,10 +30,10 @@ func LoadConfig() {
         PostgresURI:  getEnv("POSTGRES_URI", "postgres://postgres:password@localhost:5432/log_system?sslmode=disable"),
         JWTSecret:    getEnv("JWT_SECRET", "your-secret-key-change-in-production"),
         ServerPort:   getEnv("SERVER_PORT", "8080"),
-        B2KeyID:      getEnv("B2_KEY_ID", ""),
-        B2AppKey:     getEnv("B2_APP_KEY", ""),
-        B2BucketName: getEnv("B2_BUCKET_NAME", ""),
-        B2Endpoint:   getEnv("B2_ENDPOINT", "https://s3.us-west-000.backblazeb2.com"),
+        S3KeyID:      getEnv("S3_KEY_ID", ""),
+        S3AppKey:     getEnv("S3_APP_KEY", ""),
+        S3BucketName: getEnv("S3_BUCKET_NAME", ""),
+        S3Endpoint:   getEnv("S3_ENDPOINT", "https://s3.us-west-000.backblazeb2.com"),
     }
 }
 

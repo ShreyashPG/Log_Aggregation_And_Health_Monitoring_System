@@ -8,9 +8,9 @@ services:
       - mongo
       - postgres
     environment:
-      - B2_KEY_ID=your-key-id
-      - B2_APPLICATION_KEY=your-application-key
-      - B2_BUCKET_NAME=your-bucket-name
+      - S3_KEY_ID=your-key-id
+      - S3_APPLICATION_KEY=your-application-key
+      - S3_BUCKET_NAME=your-bucket-name
   frontend:
     build: ./frontend
     ports:

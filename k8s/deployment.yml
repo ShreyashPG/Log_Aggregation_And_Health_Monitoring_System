@@ -18,11 +18,11 @@ spec:
         ports:
         - containerPort: 8080
         env:
-        - name: B2_KEY_ID
+        - name: S3_KEY_ID
           value: your-key-id
-        - name: B2_APPLICATION_KEY
+        - name: S3_APPLICATION_KEY
           value: your-application-key
-        - name: B2_BUCKET_NAME
+        - name: S3_BUCKET_NAME
           value: your-bucket-name
 ---
 apiVersion: v1

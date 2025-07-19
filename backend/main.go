@@ -1,13 +1,14 @@
 package main
 
 import (
-	"backend/config"
-	"backend/handlers"
-	"backend/middleware"
+	"logmonitor/config"
+	"logmonitor/handlers"
+	"logmonitor/middleware"
 
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
+
 func main() {
 	// Initialize configs and DBs
 	config.LoadConfig()

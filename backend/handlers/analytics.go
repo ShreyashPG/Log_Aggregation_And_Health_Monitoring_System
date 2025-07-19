@@ -2,13 +2,14 @@
 package handlers
 
 import (
-    "logmonitor/backend/config"
-    "context"
-    "net/http"
-    "time"
-		"strconv"
-    "github.com/gin-gonic/gin"
-    "go.mongodb.org/mongo-driver/bson"
+	"context"
+	"logmonitor/config"
+	"net/http"
+	"strconv"
+	"time"
+
+	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 type AnalyticsResult struct {

@@ -16,20 +16,20 @@ jobs:
     - name: Build and push frontend
       run: |
         cd frontend
-        docker build -t your-dockerhub/frontend:latest .
-        docker push your-dockerhub/frontend:latest
+        docker build -t shreyaspg21/frontend:latest .
+        docker push shreyaspg21/frontend:latest
     - name: Build and push fluentd
       run: |
         cd fluentd
-        docker build -t your-dockerhub/fluentd:latest .
-        docker push your-dockerhub/fluentd:latest
+        docker build -t shreyaspg21/fluentd:latest .
+        docker push shreyaspg21/fluentd:latest
     - name: Build and push prometheus
       run: |
         cd prometheus
-        docker build -t your-dockerhub/prometheus:latest -f Dockerfile .
-        docker build -t your-dockerhub/alertmanager:latest -f alertmanager.Dockerfile .
-        docker push your-dockerhub/prometheus:latest
-        docker push your-dockerhub/alertmanager:latest
+        docker build -t shreyaspg21/prometheus:latest -f Dockerfile .
+        docker build -t shreyaspg21/alertmanager:latest -f alertmanager.Dockerfile .
+        docker push shreyaspg21/prometheus:latest
+        docker push shreyaspg21/alertmanager:latest
     - name: Deploy to EKS
       uses: aws-actions/amazon-eks@v1
       with:

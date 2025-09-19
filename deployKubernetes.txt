@@ -1,2 +1,0 @@
-eksctl create cluster --name log-aggregation-system --region us-west-2
-kubectl apply -f k8s/deployment.yaml

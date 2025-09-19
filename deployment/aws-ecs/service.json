@@ -1,0 +1,56 @@
+{
+  "serviceName": "log-monitoring-service",
+  "cluster": "log-monitoring-cluster",
+  "taskDefinition": "log-monitoring-system",
+  "desiredCount": 2,
+  "launchType": "FARGATE",
+  "networkConfiguration": {
+    "awsvpcConfiguration": {
+      "subnets": [
+        "subnet-12345678",
+        "subnet-87654321"
+      ],
+      "securityGroups": [
+        "sg-12345678"
+      ],
+      "assignPublicIp": "ENABLED"
+    }
+  },
+  "loadBalancers": [
+    {
+      "targetGroupArn": "arn:aws:elasticloadbalancing:REGION:ACCOUNT_ID:targetgroup/log-monitoring-tg/1234567890123456",
+      "containerName": "backend",
+      "containerPort": 5000
+    },
+    {
+      "targetGroupArn": "arn:aws:elasticloadbalancing:REGION:ACCOUNT_ID:targetgroup/log-monitoring-frontend-tg/1234567890123456",
+      "containerName": "frontend",
+      "containerPort": 80
+    }
+  ],
+  "serviceRegistries": [
+    {
+      "registryArn": "arn:aws:servicediscovery:REGION:ACCOUNT_ID:service/srv-12345678",
+      "containerName": "backend",
+      "containerPort": 5000
+    }
+  ],
+  "deploymentConfiguration": {
+    "maximumPercent": 200,
+    "minimumHealthyPercent": 50,
+    "deploymentCircuitBreaker": {
+      "enable": true,
+      "rollback": true
+    }
+  },
+  "tags": [
+    {
+      "key": "Environment",
+      "value": "production"
+    },
+    {
+      "key": "Application",
+      "value": "log-monitoring"
+    }
+  ]
+}

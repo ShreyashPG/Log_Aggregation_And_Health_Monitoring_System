@@ -1,38 +1,101 @@
-name: CI/CD
+name: CI/CD Pipeline
+
 on:
   push:
+    branches: [ main, develop ]
+  pull_request:
     branches: [ main ]
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: log-monitoring-system
+
 jobs:
-  build-and-deploy:
+  test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Build and push backend
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
       run: |
         cd backend
-        docker build -t your-dockerhub/backend:latest .
-        docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-        docker push your-dockerhub/backend:latest
-    - name: Build and push frontend
+        pip install -r requirements.txt
+        pip install pytest pytest-cov
+    
+    - name: Run backend tests
+      run: |
+        cd backend
+        pytest tests/ --cov=app --cov-report=xml
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    
+    - name: Install frontend dependencies
       run: |
         cd frontend
-        docker build -t shreyaspg21/frontend:latest .
-        docker push shreyaspg21/frontend:latest
-    - name: Build and push fluentd
+        npm install
+    
+    - name: Run frontend tests
       run: |
-        cd fluentd
-        docker build -t shreyaspg21/fluentd:latest .
-        docker push shreyaspg21/fluentd:latest
-    - name: Build and push prometheus
-      run: |
-        cd prometheus
-        docker build -t shreyaspg21/prometheus:latest -f Dockerfile .
-        docker build -t shreyaspg21/alertmanager:latest -f alertmanager.Dockerfile .
-        docker push shreyaspg21/prometheus:latest
-        docker push shreyaspg21/alertmanager:latest
-    - name: Deploy to EKS
-      uses: aws-actions/amazon-eks@v1
+        cd frontend
+        npm test -- --coverage --watchAll=false
+
+  build-and-deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
       with:
-        cluster-name: log-aggregation-system
-        kubeconfig: ${{ secrets.KUBECONFIG }}
-      run: kubectl apply -f k8s/deployment.yaml
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+    
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+    
+    - name: Build and push backend image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        cd backend
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY-backend:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY-backend:$IMAGE_TAG
+        docker tag $ECR_REGISTRY/$ECR_REPOSITORY-backend:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY-backend:latest
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY-backend:latest
+    
+    - name: Build and push frontend image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        cd frontend
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY-frontend:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY-frontend:$IMAGE_TAG
+        docker tag $ECR_REGISTRY/$ECR_REPOSITORY-frontend:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY-frontend:latest
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY-frontend:latest
+    
+    - name: Deploy to ECS
+      run: |
+        aws ecs update-service \
+          --cluster log-monitoring-cluster \
+          --service log-monitoring-backend \
+          --force-new-deployment
+        
+        aws ecs update-service \
+          --cluster log-monitoring-cluster \
+          --service log-monitoring-frontend \
+          --force-new-deployment

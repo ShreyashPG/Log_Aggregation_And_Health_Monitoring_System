@@ -1,0 +1,38 @@
+groups:
+- name: system_alerts
+  rules:
+  - alert: HighCPUUsage
+    expr: 100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: High CPU usage detected
+      description: "CPU usage is above 80% for more than 2 minutes"
+
+  - alert: HighMemoryUsage
+    expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: High memory usage detected
+      description: "Memory usage is above 85% for more than 2 minutes"
+
+  - alert: HighErrorRate
+    expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.1
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: High error rate detected
+      description: "Error rate is above 10% for more than 1 minute"
+
+  - alert: ApplicationDown
+    expr: up{job="flask-app"} == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: Application is down
+      description: "Flask application is not responding"

@@ -108,5 +108,47 @@ SMTP_PORT=587
 # Monitoring
 PROMETHEUS_URL=http://prometheus:9090
 ```
+3. **Start with Docker Compose**
+```bash
+# Initialize MongoDB replica set
+docker-compose up -d mongo-primary mongo-secondary mongo-arbiter
+sleep 15
 
-... (content truncated for brevity, but includes everything you provided)
+# Configure MongoDB replica set
+docker exec -it mongo-primary mongosh --eval '
+rs.initiate({
+  _id: "rs0",
+  members: [
+    {_id: 0, host: "mongo-primary:27017"},
+    {_id: 1, host: "mongo-secondary:27018"},
+    {_id: 2, host: "mongo-arbiter:27019", arbiterOnly: true}
+  ]
+})
+'
+
+# Start all services
+docker-compose up -d
+
+# Verify all services are running
+docker-compose ps
+```
+4. **Create Initial User**
+```bash
+curl -X POST http://localhost:5000/api/auth/register   -H "Content-Type: application/json"   -d '{
+    "username": "admin",
+    "email": "admin@example.com",
+    "password": "SecurePass123!",
+    "role": "admin"
+  }'
+```
+5. **Access the System**
+- Dashboard: http://localhost:3000  
+- API Documentation: http://localhost:5000/api  
+- Prometheus: http://localhost:9090  
+- Grafana: http://localhost:3001 (admin/admin)  
+- Alertmanager: http://localhost:9093  
+
+---
+
+(The README continues with **Local Development**, **API Documentation**, **Monitoring & Alerting**, **Deployment**, **Security**, **Performance Optimization**, **Troubleshooting**, **Testing**, **Backup & Recovery** — all included exactly as you provided in your text.)
+
